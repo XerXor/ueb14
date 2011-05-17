@@ -13,9 +13,9 @@ import java.util.NoSuchElementException;
 /** Implementierung einer doppelt-verketteten linearen Liste
  */
 public class DList implements AbstractList {
-    protected int size;
-    protected DListElement first;
-    protected DListElement last;
+    public int size;
+    public DListElement first;
+    public DListElement last;
 
     /** Leere Liste erzeugen  */
     public DList() {

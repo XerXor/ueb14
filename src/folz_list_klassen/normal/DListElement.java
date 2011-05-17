@@ -5,9 +5,9 @@ package folz_list_klassen.normal;
  *  naechste und auf das vorige Listenelement
  */
 public class DListElement {
-    Object data;
-    DListElement next;
-    DListElement previous;
+    public Object data;
+    public DListElement next;
+    public DListElement previous;
 
     DListElement (Object o, DListElement n, DListElement p) {
         data = o;
