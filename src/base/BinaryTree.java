@@ -17,8 +17,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 	private static final String EXCEPTION_IS_EMPTY = "BinaryTree is empty!";
 	private TreeElement root;
 	private int size = 0;
-	private int maxElementLength = 0;
-	private Comparator comparator;
+	private Comparator<Object> comparator;
 
 	public BinaryTree(Comparator<Object> comparator)
 			throws IllegalArgumentException {
@@ -256,27 +255,8 @@ public class BinaryTree implements interfaces.BinaryTree {
 
 	@Override
 	public int getLevels() {
-		if (root == null)
-			return 0;
-		DList totalLevels = new DList();
-		DList currentLevel = new DList();
-		currentLevel.addFirst(root);
-		totalLevels.addFirst(currentLevel);
-		for (int i = 0; i < totalLevels.size; i++) {
-			DList newLevel = new DList();
-			currentLevel = (DList) totalLevels.getLast();
-			DListElement listElement = (DListElement) currentLevel.first;
-			while (listElement != null && listElement.data != null) {
-				if (((TreeElement) listElement.data).leftChild != null)
-					newLevel.addLast(((TreeElement) listElement.data).leftChild);
-				if (((TreeElement) listElement.data).rightChild != null)
-					newLevel.addLast(((TreeElement) listElement.data).rightChild);
-				listElement = listElement.next;
-			}
-			if (newLevel.size != 0)
-				totalLevels.addLast(newLevel);
-		}
-		return totalLevels.size;
+		// TODO fertig machen!
+		return 0;
 	}
 
 	/**
@@ -305,7 +285,6 @@ public class BinaryTree implements interfaces.BinaryTree {
 		return mostRight;
 	}
 
-	@Override
 	public String toString() {
 		TreeElement currentElement = getMostLeftOf(root);
 		StringBuilder stringBuilder = new StringBuilder(
@@ -317,183 +296,5 @@ public class BinaryTree implements interfaces.BinaryTree {
 			onIndex++;
 		}
 		return stringBuilder.toString();
-	}
-
-	public String printTreeRootUp() {
-		DList totalLevels = treeToListOfArrays();
-		totalLevels.removeLast();
-		DList treeAsString = treeToString(totalLevels, maxElementLength);
-		DListElement aktuellesElement = treeAsString.first;
-		StringBuilder ausgabe = new StringBuilder();
-		while (aktuellesElement != null) {
-			ausgabe.append(aktuellesElement.data);
-			if (aktuellesElement.next != null)
-				ausgabe.append("\n");
-			aktuellesElement = aktuellesElement.next;
-		}
-		return ausgabe.toString();
-	}
-
-	public String printTreeRootDown() {
-		DList totalLevels = treeToListOfArrays();
-		totalLevels.removeLast();
-		DList treeAsString = treeToString(totalLevels, maxElementLength);
-		DListElement aktuellesElement = treeAsString.last;
-		StringBuilder ausgabe = new StringBuilder();
-		while (aktuellesElement != null) {
-			ausgabe.append(aktuellesElement.data);
-			if (aktuellesElement.previous != null)
-				ausgabe.append("\n");
-			aktuellesElement = aktuellesElement.previous;
-		}
-		return ausgabe.toString();
-	}
-
-	/**
-	 * @return
-	 */
-	private DList treeToListOfArrays() {
-		if (root == null)
-			return null;
-		DList totalLevels = new DList();
-		Object[] currentLevel = new Object[1];
-		currentLevel[0] = root;
-		totalLevels.addLast(currentLevel);
-		int newLevelSize = 1;
-		for (int i = 0; i < totalLevels.size; i++) {
-			newLevelSize = newLevelSize * 2;
-			Object[] newLevel = new Object[newLevelSize];
-			currentLevel = (Object[]) totalLevels.getLast();
-			int currentElement = 0;
-			int addIn = 0;
-			boolean hinzufuegen = false;
-			while (currentElement < currentLevel.length) {
-				TreeElement listElement = (TreeElement) currentLevel[currentElement];
-				if (listElement != null) {
-					int elementsLength = listElement.data.toString()
-							.toCharArray().length;
-					if (elementsLength > maxElementLength) // get max
-						maxElementLength = elementsLength;// element-size
-					newLevel[addIn] = listElement.leftChild;
-					addIn++;
-					newLevel[addIn] = listElement.rightChild;
-					hinzufuegen = true;
-				} else {
-					newLevel[addIn] = null;
-					addIn++;
-					newLevel[addIn] = null;
-				}
-				currentElement++;
-				addIn++;
-			}
-			if (hinzufuegen) {
-				totalLevels.addLast(newLevel);
-			}
-		}
-		return totalLevels;
-	}
-
-	/**
-	 * @param totalLevels
-	 * @param maxElementLength
-	 * @return
-	 */
-	private DList treeToString(DList totalLevels, int maxElementLength) {
-		Object[] currentLevel;
-		DList treeAsString = new DList();
-		DListElement element = totalLevels.first;
-		int tabs = totalLevels.size;
-		maxElementLength = maxElementLength / 8;
-		StringBuilder maxElementTabs = new StringBuilder();
-		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
-			maxElementTabs.append("\t");
-		}
-		while (element != null) {
-			StringBuilder sb = new StringBuilder();
-			StringBuilder delimiter = new StringBuilder();
-			for (int j = 0; j < (2 << tabs - 2) - 1; j++) {
-				delimiter.append(maxElementTabs);
-			}
-			if (tabs > 0) {
-				sb.append(delimiter);
-			}
-			delimiter.append(maxElementTabs);
-			delimiter.append(delimiter);
-			currentLevel = (Object[]) element.data;
-			for (int i = 0; i < currentLevel.length; i++) {
-				if (currentLevel[i] != null) {
-					int elementLength = (currentLevel[i]).toString()
-							.toCharArray().length / 8 + 1;
-					if (elementLength < maxElementLength) {
-						sb.append(currentLevel[i]);
-						while (elementLength <= maxElementLength) {
-							sb.append("\t");
-							elementLength++;
-						}
-					} else {
-						sb.append(currentLevel[i]);
-					}
-				}
-				if (i < currentLevel.length - 1) {
-					sb.append(delimiter);
-				}
-			}
-			tabs--;
-			treeAsString.addLast(sb.toString());
-			element = element.next;
-		}
-		return treeAsString;
-	}
-
-	public String printTreeRootLeft() {
-		TreeElement currentElement = getMostRightOf(root);
-		StringBuilder ausgabe = new StringBuilder();
-		StringBuilder maxElementTabs = new StringBuilder();
-		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
-			maxElementTabs.append("\t");
-		}
-		for (int i = 0; i < size; i++) {
-			int tabsToDo = levelOf(currentElement);
-			while (tabsToDo != 0) {
-				ausgabe.append(maxElementTabs);
-				tabsToDo--;
-			}
-			ausgabe.append(currentElement.data);
-			ausgabe.append("\n");
-
-			if (currentElement.leftChild != null) {
-				currentElement = getMostRightOf(currentElement.leftChild);
-			} else if (!currentElement.isRoot()) {
-				int vergleichsWert = comparator.compare(currentElement.data,
-						currentElement.father.data);
-				if (vergleichsWert > -1)
-					currentElement = currentElement.father;
-				else {
-					while (vergleichsWert < 0 && !currentElement.isRoot()) {
-						vergleichsWert = comparator
-								.compare(currentElement.data,
-										currentElement.father.data);
-						currentElement = currentElement.father;
-					}
-					// if(!currentElement.isRoot())
-					// currentElement = currentElement.father;
-				}
-			}
-		}
-		return ausgabe.toString();
-	}
-
-	public int levelOf(TreeElement subTree) {
-		if (size == 0)
-			return 0;
-		else {
-			int level = 0;
-			TreeElement currentElement = subTree;
-			while (!currentElement.isRoot()) {
-				level++;
-				currentElement = currentElement.father;
-			}
-			return level;
-		}
 	}
 }
