@@ -22,7 +22,7 @@ public class TestTree {
 		testTree.tree.insert(1600);
 		testTree.tree.insert(2000000);
 		
-
+//TODO we need a true dialog! not just this test XD
 		System.out.println("Root Left:");
 		System.out.println(testTree.tree.printTreeRootLeft());
 		System.out.println("\n\nRoot On Top:");
