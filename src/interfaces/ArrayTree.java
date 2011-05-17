@@ -1,33 +1,33 @@
 package interfaces;
 
+import exceptions.ArrayIsEmptyException;
+import exceptions.QueueIsEmptyException;
+import exceptions.QueueIsFullException;
+
 /**
  * Baum und Tree gekapselt.
- * 
- * @author Alexei Felberg
- * @author Daniel Rhein
- * @version 09.05.2011
+ * @author Daniel
+ *
  */
 public interface ArrayTree {
 	/**
 	 * Object hinzufügen
-	 * 
 	 * @param object
 	 * @throws IllegalArgumentException
+	 * @throws QueueIsEmptyException 
 	 */
-	public void add(Object object) throws IllegalArgumentException;
-
+	public void add(Object object) throws IllegalArgumentException, QueueIsEmptyException;
 	/**
 	 * Entferne Element
-	 * 
 	 * @param object
 	 * @throws IllegalArgumentException
+	 * @throws QueueIsFullException 
+	 * @throws ArrayIsEmptyException 
 	 */
-	public void remove(Object object) throws IllegalArgumentException;
-
+	public void remove(Object object) throws IllegalArgumentException, ArrayIsEmptyException, QueueIsFullException;
 	/**
 	 * Groesse des Elements
-	 * 
 	 * @return
 	 */
-	public int size();
+	public int size(); 
 }
