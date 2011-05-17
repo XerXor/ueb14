@@ -1,3 +1,4 @@
+package test;
 import java.util.Comparator;
 
 public class IntegerComparator implements Comparator {

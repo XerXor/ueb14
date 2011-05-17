@@ -1,3 +1,5 @@
+package test;
+
 import base.BinaryTree;
 
 public class TestTree {
