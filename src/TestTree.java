@@ -3,7 +3,6 @@ import base.BinaryTree;
 public class TestTree {
 
 	public BinaryTree tree = new BinaryTree(new IntegerComparator());
-	static int a = 0;
 
 	public static final void main(String[] args) {
 		TestTree testTree = new TestTree();
