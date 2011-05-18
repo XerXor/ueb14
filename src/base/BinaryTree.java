@@ -2,9 +2,6 @@ package base;
 
 import java.util.Comparator;
 
-import folz_list_klassen.normal.DList;
-import folz_list_klassen.normal.DListElement;
-
 /**
  * A BinaryTree that works iterative. It needs a Comparator to insert Objects in
  * the proper order.
