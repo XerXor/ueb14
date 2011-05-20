@@ -1,6 +1,7 @@
 package base;
 
 import java.util.Comparator;
+import exceptions.TreeException;
 
 /**
  * A BinaryTree that works iterative. It needs a Comparator to insert Objects in
@@ -8,9 +9,10 @@ import java.util.Comparator;
  * 
  * @author Alexei Felberg
  * @author Daniel Rhein
- * @version 09.05.2011
+ * @version 20.05.2011
  */
 public class BinaryTree implements interfaces.BinaryTree {
+	private static final String OUT_NEW_LINE = "\n";
 	private static final String OUT_DELIMITER = "\t";
 	private static final String EXCEPTION_OUT_OF_BOUNDS = "Index is out of BinaryTree bounds!";
 	private static final String EXCEPTION_RECEIVED_NULL = "Es wurde null an BinaryTree uebergeben.";
@@ -20,17 +22,25 @@ public class BinaryTree implements interfaces.BinaryTree {
 	private int maxElementLength = 0;
 	private Comparator comparator;
 
-	public BinaryTree(Comparator<Object> comparator)
-			throws IllegalArgumentException {
+	/**
+	 * Konstruktor fuer eine Baumklasse. Es wird ein Comparator verlangt, nach
+	 * dem die einzufuegenden Objekte sortiert werden.
+	 * 
+	 * @param comparator
+	 *            nach diesem Comparator wird der Baum sortiert.
+	 * @throws IllegalArgumentException
+	 *             wenn der Comparator null ist.
+	 */
+	public BinaryTree(Comparator comparator) throws TreeException {
 		if (comparator == null)
-			throw new IllegalArgumentException(EXCEPTION_RECEIVED_NULL);
+			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		this.comparator = comparator;
 	}
 
 	@Override
-	public void insert(Object object) throws IllegalArgumentException {
+	public void insert(Object object) throws TreeException {
 		if (object == null)
-			throw new IllegalArgumentException(EXCEPTION_RECEIVED_NULL);
+			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		if (size == 0) {
 			root = new TreeElement(null, null, object);
 			size++;
@@ -41,11 +51,10 @@ public class BinaryTree implements interfaces.BinaryTree {
 		while (again) {
 			int vergleichsWert = comparator
 					.compare(object, currentElement.data);
-			if (vergleichsWert == -1) {
+			if (vergleichsWert < 0) {
 				if (currentElement.leftChild == null) {
 					currentElement.leftChild = new TreeElement(currentElement,
 							object);
-					size++;
 					again = false;
 				} else
 					currentElement = currentElement.leftChild;
@@ -53,20 +62,20 @@ public class BinaryTree implements interfaces.BinaryTree {
 				if (currentElement.rightChild == null) {
 					currentElement.rightChild = new TreeElement(currentElement,
 							object);
-					size++;
 					again = false;
 				} else
 					currentElement = currentElement.rightChild;
 			}
 		}
+		size++;
 	}
 
 	@Override
-	public void remove(Object object) throws IllegalArgumentException {
+	public void remove(Object object) throws TreeException {
 		if (object == null)
-			throw new IllegalArgumentException(EXCEPTION_RECEIVED_NULL);
+			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		if (size == 0)
-			throw new RuntimeException(EXCEPTION_IS_EMPTY);
+			throw new TreeException(EXCEPTION_IS_EMPTY);
 		TreeElement aktuellesElement = root;
 		boolean weiter = true;
 		while (weiter) {
@@ -84,7 +93,6 @@ public class BinaryTree implements interfaces.BinaryTree {
 					aktuellesElement = aktuellesElement.rightChild;
 			} else {
 				if (vergleichsWert == 0) {
-					System.out.println(aktuellesElement);
 					removePosition(aktuellesElement);
 					size--;
 					return;
@@ -96,10 +104,9 @@ public class BinaryTree implements interfaces.BinaryTree {
 	/**
 	 * Like {@link #insert(Object)}, but with TreeElements instead of Objects.
 	 */
-	protected void insert(TreeElement treeElement)
-			throws IllegalArgumentException {
+	protected void insert(TreeElement treeElement) throws TreeException {
 		if (treeElement == null)
-			throw new IllegalArgumentException(EXCEPTION_RECEIVED_NULL);
+			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		if (size == 0)
 			root = treeElement;
 		TreeElement aktuellesElement = root;
@@ -131,8 +138,11 @@ public class BinaryTree implements interfaces.BinaryTree {
 	 * 
 	 * @param aktuellesElement
 	 *            the target TreeElement, which has to be removed.
+	 * @throws TreeException
+	 *             weitergeleitet von {@link #insert(Object)}
 	 */
-	protected void removePosition(TreeElement aktuellesElement) {
+	protected void removePosition(TreeElement aktuellesElement)
+			throws TreeException {
 		TreeElement rightChild;
 		TreeElement leftChild;
 		if (aktuellesElement.isRoot())
@@ -177,9 +187,9 @@ public class BinaryTree implements interfaces.BinaryTree {
 	}
 
 	@Override
-	public boolean contains(Object object) throws IllegalArgumentException {
+	public boolean contains(Object object) throws TreeException {
 		if (object == null)
-			throw new IllegalArgumentException(EXCEPTION_RECEIVED_NULL);
+			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		if (size != 0) {
 			TreeElement aktuellesElement = root;
 			boolean weiter = true;
@@ -205,9 +215,9 @@ public class BinaryTree implements interfaces.BinaryTree {
 	}
 
 	@Override
-	public Object get(int index) throws IndexOutOfBoundsException {
+	public Object get(int index) throws TreeException {
 		if (index < 0 || index > size)
-			throw new IndexOutOfBoundsException(EXCEPTION_OUT_OF_BOUNDS);
+			throw new TreeException(EXCEPTION_OUT_OF_BOUNDS);
 		int i = 0;
 		TreeElement currentElement = getMostLeftOf(root);
 		while (i < index && currentElement != null) {
@@ -220,6 +230,18 @@ public class BinaryTree implements interfaces.BinaryTree {
 		return null; // this return is unreachable
 	}
 
+	/**
+	 * Wenn der Baum leer ist wird das uebergebene Objekt zurueckgeliefert.
+	 * Ansonsten liefert die Methode das naechste Element, welches bei der
+	 * Traversierung nach "in-order" Prinzip, vom gegebenen Objekt, folgen
+	 * wuerde.
+	 * 
+	 * @param element
+	 *            von dem aus das naechst groessere Element aufgesucht wird.
+	 * @return das naechst groessere Element, sofern es eins gibt. Wenn kein
+	 *         groessere vorhanden ist, wird das uebergebene Element
+	 *         zurueckgeliefert.
+	 */
 	protected TreeElement nextOf(TreeElement element) {
 		if (size > 1) {
 			TreeElement currentElement = element;
@@ -287,8 +309,10 @@ public class BinaryTree implements interfaces.BinaryTree {
 	 */
 	protected TreeElement getMostLeftOf(TreeElement subTree) {
 		TreeElement mostLeft = subTree;
-		while (mostLeft.leftChild != null)
-			mostLeft = mostLeft.leftChild;
+		if (size != 0) {
+			while (mostLeft.leftChild != null)
+				mostLeft = mostLeft.leftChild;
+		}
 		return mostLeft;
 	}
 
@@ -307,50 +331,110 @@ public class BinaryTree implements interfaces.BinaryTree {
 
 	@Override
 	public String toString() {
-		TreeElement currentElement = getMostLeftOf(root);
-		StringBuilder stringBuilder = new StringBuilder(
-				currentElement.toString());
-		int onIndex = 1;
-		while (onIndex < size) {
-			currentElement = nextOf(currentElement);
-			stringBuilder.append(OUT_DELIMITER + currentElement);
-			onIndex++;
+		if (size != 0) {
+			TreeElement currentElement = getMostLeftOf(root);
+			StringBuilder stringBuilder = new StringBuilder(
+					currentElement.toString());
+			int onIndex = 1;
+			while (onIndex < size) {
+				currentElement = nextOf(currentElement);
+				stringBuilder.append(OUT_DELIMITER + currentElement);
+				onIndex++;
+			}
+			return stringBuilder.toString();
 		}
-		return stringBuilder.toString();
+		return "";
 	}
 
+	/**
+	 * Baumstruktur wird in einem String simuliert ausgegeben. Diese Methode
+	 * erstellt den Baum mit der Wurzel oben und nach unten wachsend.
+	 * 
+	 * @return ein String, welcher den Baum repraesentiert.
+	 */
 	public String printTreeRootUp() {
 		DList totalLevels = treeToListOfArrays();
 		totalLevels.removeLast();
-		DList treeAsString = treeToString(totalLevels, maxElementLength);
+		DList treeAsString = treeToStringList(totalLevels, maxElementLength);
 		DListElement aktuellesElement = treeAsString.first;
 		StringBuilder ausgabe = new StringBuilder();
 		while (aktuellesElement != null) {
 			ausgabe.append(aktuellesElement.data);
 			if (aktuellesElement.next != null)
-				ausgabe.append("\n");
+				ausgabe.append(OUT_NEW_LINE);
 			aktuellesElement = aktuellesElement.next;
 		}
 		return ausgabe.toString();
 	}
 
+	/**
+	 * Baumstruktur wird in einem String simuliert ausgegeben. Diese Methode
+	 * erstellt den Baum mit der Wurzel unten und nach oben wachsend.
+	 * 
+	 * @return ein String, welcher den Baum repraesentiert.
+	 */
 	public String printTreeRootDown() {
 		DList totalLevels = treeToListOfArrays();
 		totalLevels.removeLast();
-		DList treeAsString = treeToString(totalLevels, maxElementLength);
+		DList treeAsString = treeToStringList(totalLevels, maxElementLength);
 		DListElement aktuellesElement = treeAsString.last;
 		StringBuilder ausgabe = new StringBuilder();
 		while (aktuellesElement != null) {
 			ausgabe.append(aktuellesElement.data);
 			if (aktuellesElement.previous != null)
-				ausgabe.append("\n");
+				ausgabe.append(OUT_NEW_LINE);
 			aktuellesElement = aktuellesElement.previous;
 		}
 		return ausgabe.toString();
 	}
 
 	/**
-	 * @return
+	 * Baumstruktur wird in einem String simuliert ausgegeben. Diese Methode
+	 * erstellt den Baum mit der Wurzel links und nach rechts wachsend.
+	 * 
+	 * @return ein String, welcher den Baum repraesentiert.
+	 */
+	public String printTreeRootLeft() {
+		TreeElement currentElement = getMostRightOf(root);
+		StringBuilder ausgabe = new StringBuilder();
+		StringBuilder maxElementTabs = new StringBuilder();
+		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
+			maxElementTabs.append(OUT_DELIMITER);
+		}
+		for (int i = 0; i < size; i++) {
+			int tabsToDo = levelOf(currentElement);
+			while (tabsToDo != 0) {
+				ausgabe.append(maxElementTabs);
+				tabsToDo--;
+			}
+			ausgabe.append(currentElement.data);
+			ausgabe.append(OUT_NEW_LINE);
+
+			if (currentElement.leftChild != null) {
+				currentElement = getMostRightOf(currentElement.leftChild);
+			} else if (!currentElement.isRoot()) {
+				int vergleichsWert = comparator.compare(currentElement.data,
+						currentElement.father.data);
+				if (vergleichsWert > -1)
+					currentElement = currentElement.father;
+				else {
+					while (vergleichsWert < 0 && !currentElement.isRoot()) {
+						vergleichsWert = comparator
+								.compare(currentElement.data,
+										currentElement.father.data);
+						currentElement = currentElement.father;
+					}
+				}
+			}
+		}
+		return ausgabe.toString();
+	}
+
+	/**
+	 * Erstellt eine dynamische Liste, welche den Baum, in Arrays gepackt
+	 * abspeichert. Die Arrays stellen die einzelnen Ebenen des Baumes dar.
+	 * 
+	 * @return eine dynamische Liste mit Baumebenen als Array gepackt.
 	 */
 	private DList treeToListOfArrays() {
 		if (root == null)
@@ -394,19 +478,24 @@ public class BinaryTree implements interfaces.BinaryTree {
 	}
 
 	/**
-	 * @param totalLevels
+	 * Erstellt eine String, welcher den Baum repraesentiert. Der Baum wird nach
+	 * dem Prinzip "in-order" in den String gepackt.
+	 * 
+	 * @param listOfTreeLevels
+	 *            eine Liste, die Arrays von Baumebenen mitsich fuehrt.
 	 * @param maxElementLength
-	 * @return
+	 *            die maximale Laenge der Elemente.
+	 * @return eine Liste mit Strings, welche die Einzelnen Ebenen darstellen.
 	 */
-	private DList treeToString(DList totalLevels, int maxElementLength) {
+	private DList treeToStringList(DList listOfTreeLevels, int maxElementLength) {
 		Object[] currentLevel;
 		DList treeAsString = new DList();
-		DListElement element = totalLevels.first;
-		int tabs = totalLevels.size;
+		DListElement element = listOfTreeLevels.first;
+		int tabs = listOfTreeLevels.size;
 		maxElementLength = maxElementLength / 8;
 		StringBuilder maxElementTabs = new StringBuilder();
 		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
-			maxElementTabs.append("\t");
+			maxElementTabs.append(OUT_DELIMITER);
 		}
 		while (element != null) {
 			StringBuilder sb = new StringBuilder();
@@ -427,7 +516,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 					if (elementLength < maxElementLength) {
 						sb.append(currentLevel[i]);
 						while (elementLength <= maxElementLength) {
-							sb.append("\t");
+							sb.append(OUT_DELIMITER);
 							elementLength++;
 						}
 					} else {
@@ -445,44 +534,13 @@ public class BinaryTree implements interfaces.BinaryTree {
 		return treeAsString;
 	}
 
-	public String printTreeRootLeft() {
-		TreeElement currentElement = getMostRightOf(root);
-		StringBuilder ausgabe = new StringBuilder();
-		StringBuilder maxElementTabs = new StringBuilder();
-		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
-			maxElementTabs.append("\t");
-		}
-		for (int i = 0; i < size; i++) {
-			int tabsToDo = levelOf(currentElement);
-			while (tabsToDo != 0) {
-				ausgabe.append(maxElementTabs);
-				tabsToDo--;
-			}
-			ausgabe.append(currentElement.data);
-			ausgabe.append("\n");
-
-			if (currentElement.leftChild != null) {
-				currentElement = getMostRightOf(currentElement.leftChild);
-			} else if (!currentElement.isRoot()) {
-				int vergleichsWert = comparator.compare(currentElement.data,
-						currentElement.father.data);
-				if (vergleichsWert > -1)
-					currentElement = currentElement.father;
-				else {
-					while (vergleichsWert < 0 && !currentElement.isRoot()) {
-						vergleichsWert = comparator
-								.compare(currentElement.data,
-										currentElement.father.data);
-						currentElement = currentElement.father;
-					}
-					// if(!currentElement.isRoot())
-					// currentElement = currentElement.father;
-				}
-			}
-		}
-		return ausgabe.toString();
-	}
-
+	/**
+	 * Liefert die Ebene, in der sich der uebergebene Teilbaum befindet.
+	 * 
+	 * @param subTree
+	 *            von dem man die Ebene im Hauptbaum ermitteln moechte.
+	 * @return Ebene in der sich der Teilbaum befindet.
+	 */
 	public int levelOf(TreeElement subTree) {
 		if (size == 0)
 			return 0;

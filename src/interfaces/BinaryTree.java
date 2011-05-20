@@ -1,5 +1,7 @@
 package interfaces;
 
+import exceptions.TreeException;
+
 /**
  * Alle Methoden eines Binaerbaumes.
  * 
@@ -13,7 +15,7 @@ public interface BinaryTree {
 	 * 
 	 * @param object
 	 */
-	public void insert(Object object) throws IllegalArgumentException;
+	public void insert(Object object) throws TreeException;
 
 	/**
 	 * Loescht ein Element aus dem Tree.
@@ -21,7 +23,7 @@ public interface BinaryTree {
 	 * @param object
 	 * @throws IllegalArgumentException
 	 */
-	public void remove(Object object) throws IllegalArgumentException;
+	public void remove(Object object) throws TreeException;
 
 	public int size();
 
@@ -32,7 +34,7 @@ public interface BinaryTree {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public boolean contains(Object object) throws IllegalArgumentException;
+	public boolean contains(Object object) throws TreeException;
 
 	/**
 	 * Liefert ein Object aus dem Baum zurueck.
@@ -41,7 +43,7 @@ public interface BinaryTree {
 	 * @return
 	 * @throws IndexOutOfBoundsException
 	 */
-	public Object get(int index) throws IndexOutOfBoundsException;
+	public Object get(int index) throws TreeException;
 
 	/**
 	 * Liefert den Root des Baumes zurueck.

@@ -75,13 +75,16 @@ public class Array implements interfaces.Array {
 	 * @throws QueueIsFullException
 	 * wenn die Queue voll ist wird dieser Fehler geworfen. 
 	 */
-	private void initQueue(int size) throws IllegalArgumentException, QueueIsFullException
+	private void initQueue(int size) throws IllegalArgumentException
 	{
 		if (size<MIN_VALUE) throw new IllegalArgumentException(ERROR_QUEUE_SIZE_MINIMUM);
 		queue = new ArrayQueue(size);
 		for (int i =0;i<size;i++)
 		{
-			queue.add(i);
+			try {
+				queue.add(i);
+			} catch (QueueIsFullException e) {//can't happen!
+			}
 		}
 	}
 	
@@ -91,7 +94,7 @@ public class Array implements interfaces.Array {
 	 * @throws QueueIsFullException 
 	 * 
 	 */
-	public Array(int size) throws IllegalArgumentException, QueueIsFullException {
+	public Array(int size) throws IllegalArgumentException {
 		if (size < MIN_VALUE)
 			throw new IllegalArgumentException(ERROR_MIN_INDEX);
 		initQueue(size);
@@ -142,8 +145,7 @@ public class Array implements interfaces.Array {
 		if (object == null)
 			throw new IllegalArgumentException(ERROR_OBJECT_NULL);
 		for (int i = 0; i < elements.length; i++) {
-			
-			if (elements[i] == object) {
+			if (object.equals(elements[i])) {
 				return i;
 			}
 		}

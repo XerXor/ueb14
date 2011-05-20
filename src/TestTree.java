@@ -1,34 +1,37 @@
+import exceptions.TreeException;
 import base.BinaryTree;
 
 public class TestTree {
 
-	public BinaryTree tree = new BinaryTree(new IntegerComparator());
+	public static BinaryTree tree;
 	static int a = 0;
 
 	public static final void main(String[] args) {
-		TestTree testTree = new TestTree();
-		testTree.tree.insert(1000);
-		testTree.tree.insert(100);
-		testTree.tree.insert(50);
-		testTree.tree.insert(10);
-		testTree.tree.insert(60);
-		testTree.tree.insert(1500);
-		testTree.tree.insert(1200);
-		testTree.tree.insert(1800);
-		testTree.tree.insert(200);
-		testTree.tree.insert(150);
-		testTree.tree.insert(250);
-		testTree.tree.insert(1100);
-		testTree.tree.insert(1400);
-		testTree.tree.insert(1600);
-		testTree.tree.insert(2000000);
-		
+		try {
+			tree = new BinaryTree(new IntegerComparator());
+			tree.insert(1000);
+			tree.insert(100);
+			tree.insert(50);
+			tree.insert(10);
+			tree.insert(60);
+			tree.insert(1500);
+			tree.insert(1200);
+			tree.insert(1800);
+			tree.insert(200);
+			tree.insert(150);
+			tree.insert(250);
+			tree.insert(1100);
+			tree.insert(1400);
+			tree.insert(1600);
+			tree.insert(2000);
+		} catch (TreeException e) {
+		}
 
 		System.out.println("Root Left:");
-		System.out.println(testTree.tree.printTreeRootLeft());
+		System.out.println(tree.printTreeRootLeft());
 		System.out.println("\n\nRoot On Top:");
-		System.out.println(testTree.tree.printTreeRootUp());
+		System.out.println(tree.printTreeRootUp());
 		System.out.println("\n\nRoot On Ground:");
-		System.out.println(testTree.tree.printTreeRootDown());
+		System.out.println(tree.printTreeRootDown());
 	}
 }
