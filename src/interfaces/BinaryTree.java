@@ -57,6 +57,13 @@ public interface BinaryTree {
 	 * 
 	 * @return
 	 */
-	int getLevels();
+	public int getLevels();
+	
+	/**
+	 * Gibt an, ob der Baum leer ist oder nicht.
+	 * @return
+	 */
+	public boolean isEmpty();
+	
 
 }

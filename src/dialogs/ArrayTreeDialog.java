@@ -18,6 +18,7 @@ import exceptions.IllegalCommandException;
  * @version 20.05.2011
  */
 public class ArrayTreeDialog {
+	private static final String INFORMATION_TREE_IS_EMPTY = "Zur Zeit ist der Baum leer";
 	private static final String OUT_TREE_VARIATIONS = "1: Wurzel unten, Baum nach oben aufbauen\n" +
 													  "2: Wurzel oben, Baum nach unten aufbauen\n" +
 													  "3: Wurzel links, Baum nach rechts aufbauen";
@@ -117,12 +118,26 @@ public class ArrayTreeDialog {
 					readFile(readFileName());
 					break;
 				case 2:
+					if (treeVerwaltung.isEmpty())
+					{
+						System.out.println(INFORMATION_TREE_IS_EMPTY);	
+					}
+					else
+					{
 					System.out.println(treeVerwaltung);
+					}
 					break;
 				case 3:
 					System.out.println(OUT_TREE_VARIATIONS);
 					int variante = Stdin.readInt(IN_PRINT_TREE_VARIATION);
-					System.out.println(treeVerwaltung.printVariation(variante));
+					if (treeVerwaltung.isEmpty())
+					{
+						System.out.println(INFORMATION_TREE_IS_EMPTY);
+					}
+					else
+					{
+						System.out.println(treeVerwaltung.printVariation(variante));
+					}
 					break;
 				default:
 					System.out.println(INVALID_COMMAND);

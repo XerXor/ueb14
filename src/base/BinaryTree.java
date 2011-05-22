@@ -32,6 +32,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 	 * @throws IllegalArgumentException
 	 *             wenn der Comparator null ist.
 	 */
+	//TODO:Typsicherheit garantieren. Bitte Ueberpruefe den Code nocheinmal
 	public BinaryTree(Comparator comparator) throws TreeException {
 		if (comparator == null)
 			throw new TreeException(EXCEPTION_RECEIVED_NULL);
@@ -39,6 +40,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 	}
 
 	@Override
+	//TODO:Typsicherheit garantieren. Bitte Ueberpruefe den Code nocheinmal
 	public void insert(Object object) throws TreeException {
 		if (object == null)
 			throw new TreeException(EXCEPTION_RECEIVED_NULL);
@@ -88,6 +90,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 	 *             ist</li><li>kein BaumElement mit uebergebener Referenz
 	 *             vorhanden ist</li>
 	 */
+	//TODO:Typsicherheit garantieren. Bitte Ueberpruefe den Code nocheinmal
 	protected TreeElement findElement(Object object) throws TreeException {
 		if (object == null)
 			throw new TreeException(EXCEPTION_RECEIVED_NULL);
@@ -569,5 +572,10 @@ public class BinaryTree implements interfaces.BinaryTree {
 			}
 			return level;
 		}
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return (size==0);
 	}
 }

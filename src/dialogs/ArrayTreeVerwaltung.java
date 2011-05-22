@@ -106,6 +106,15 @@ public class ArrayTreeVerwaltung {
 	}
 
 	/**
+	 * Informiert darueber, ob der ArrayTree leer ist oder nicht.
+	 * @return
+	 */
+	public boolean isEmpty()
+	{
+		return arrayTree.isEmpty();
+	}
+	
+	/**
 	 * Methode leitet nur den uebergebenen int weiter an :
 	 * {@link ArrayTree#printVariation(int)}
 	 */

@@ -91,4 +91,13 @@ public class ArrayTree implements interfaces.ArrayTree,Comparator<Object>{
 		stringbuilder.append(array.toString());
 		return stringbuilder.toString();
 	}
+	
+	/**
+	 * Gibt an, ob die Werte null sind.
+	 * @return
+	 */
+	public boolean isEmpty()
+	{
+		return (array.isEmpty() && dustbintree.isEmpty());
+	}
 }
