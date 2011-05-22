@@ -124,7 +124,7 @@ public class Array implements interfaces.Array {
 			{
 				counter++;
 			}
-			if (elements[i] == object) {
+			if (elements[i].equals(object)) {
 				return counter;
 			}
 		}
@@ -142,9 +142,11 @@ public class Array implements interfaces.Array {
 		if (object == null)
 			throw new IllegalArgumentException(ERROR_OBJECT_NULL);
 		for (int i = 0; i < elements.length; i++) {
-			
-			if (elements[i].equals(object)) {
+			if (elements[i]!=null)
+			{
+				if (elements[i].equals(object)) {
 				return i;
+			}
 			}
 		}
 		return -1;
