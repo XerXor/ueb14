@@ -34,12 +34,15 @@ public class ArrayTreeVerwaltung {
 	 * @param maxSize
 	 *            setzt die Arraygroesse fest und ebenso die maximale Anzahl an
 	 *            Objekten, die der Baum beinhalten kann.
+	 * @TreeException
+	 * Sollten Fehler im Tree auftreten, so werden diese hier geworfen.
+	 * @IllegalArgumentException
+	 * Sollte eine Fehleingabe passieren wird diese hier geworfen.
+	 * @QueueIsFullexception
+	 * Sollte die Queue voll sein wird ein Fehler hier geworfen.
 	 */
-	public ArrayTreeVerwaltung(int maxSize) {
-			try {
+	public ArrayTreeVerwaltung(int maxSize) throws IllegalArgumentException, TreeException,QueueIsFullException{
 				arrayTree = new ArrayTree(maxSize);
-			} catch (IllegalArgumentException e) {
-			}
 	}
 
 	/**

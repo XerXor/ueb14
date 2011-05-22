@@ -19,13 +19,10 @@ public class ArrayTree implements interfaces.ArrayTree,Comparator<Object>{
 	BinaryTree dustbintree;
 	Array array = null;
 	
-	public ArrayTree(int size) throws IllegalArgumentException
+	public ArrayTree(int size) throws IllegalArgumentException,QueueIsFullException,TreeException 
 	{
-		try {
 			dustbintree = new BinaryTree(this);
-		} catch (TreeException e) {// can't happen
-		}
-		array = new  Array(size);
+			array = new  Array(size);
 	}
 	
 	@Override

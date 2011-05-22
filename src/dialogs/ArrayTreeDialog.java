@@ -9,6 +9,8 @@ import de.htw.saarland.stl.Stdin;
 import exceptions.EigeneExceptions;
 import exceptions.FileException;
 import exceptions.IllegalCommandException;
+import exceptions.QueueIsFullException;
+import exceptions.TreeException;
 
 /**
  * Eine Testklasse, mit der man ein ArrayTree auf Funktion pruefen kann.
@@ -18,6 +20,7 @@ import exceptions.IllegalCommandException;
  * @version 20.05.2011
  */
 public class ArrayTreeDialog {
+	private static final String ERROR_TITLE_ERROR_OCCURS = "Fehler aufgetreten";
 	private static final String INFORMATION_TREE_IS_EMPTY = "Zur Zeit ist der Baum leer";
 	private static final String OUT_TREE_VARIATIONS = "1: Wurzel unten, Baum nach oben aufbauen\n" +
 													  "2: Wurzel oben, Baum nach unten aufbauen\n" +
@@ -89,6 +92,7 @@ public class ArrayTreeDialog {
 				System.err.println(OUT_EXCEPTION_OCCURED
 						+ lineReader.getLineNumber() + OUT_CONTENT + line
 						+ OUT_NEW_LINE + eigeneExceptions);
+				eigeneExceptions.printStackTrace();
 			}
 			System.out.println((lineReader.getLineNumber() + OUT_SEPARATOR
 					+ line));
@@ -97,14 +101,61 @@ public class ArrayTreeDialog {
 		}
 		fileReader.close();
 	}
-
+	/**
+	 * Array initialisierung
+	 */
+	private void initializeArray()
+	{
+		boolean fehleraufgetreten = false; //hilfsvariable zum feststellen ob ein fehler ausgegeben wurde.
+		do
+		{
+			
+		try
+		{
+			int maxSize = Stdin.readInt(IN_ARRAY_SIZE);
+			treeVerwaltung = new ArrayTreeVerwaltung(maxSize);
+		}
+		catch(QueueIsFullException queueisfullexception)
+		{
+			fehlermeldungausgeben(ERROR_TITLE_ERROR_OCCURS,queueisfullexception.getMessage());
+			fehleraufgetreten=true;
+		}
+		catch (TreeException treeexception)
+		{
+			fehlermeldungausgeben(ERROR_TITLE_ERROR_OCCURS,treeexception.getMessage());
+			fehleraufgetreten=true;
+		}
+		catch(IllegalArgumentException illegalargumentexception)
+		{
+			fehlermeldungausgeben(ERROR_TITLE_ERROR_OCCURS,illegalargumentexception.getMessage());
+			fehleraufgetreten=true;
+		}
+		if (fehleraufgetreten)
+		{
+			System.out.println("Bei der Verarbeitung Ihrer Eingaben ist ein Fehler aufgetreten. Bitte wieder holen sie Ihre Eingabe.");
+		}
+		}
+		while(fehleraufgetreten == true);
+		
+	}
+	
+	/**
+	 * Fehlermeldungen ausgeben.
+	 * @param title
+	 * @param message
+	 */
+	private void fehlermeldungausgeben(String title,String message)
+	{
+		System.err.println(title);
+		System.err.println(message);
+	}
+	
 	/**
 	 * Eigentliche Ausfuehrmethode dieser Klasse. Hier wird dem Benutzer ein
 	 * Menue eingeblendet, welches ihm erlaubt das Programm zu steuern.
 	 */
 	private void start() {
-		int maxSize = Stdin.readInt(IN_ARRAY_SIZE);
-		treeVerwaltung = new ArrayTreeVerwaltung(maxSize);
+		initializeArray();
 		while (true) {
 			System.out.println(OUT_MENUE_COMMANDS);
 			try {

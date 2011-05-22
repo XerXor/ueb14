@@ -6,7 +6,7 @@ import exceptions.QueueIsEmptyException;
 import exceptions.QueueIsFullException;
 
 /**
- * 
+ * Bilded einen Array ab.
  * @author Daniel
  * @author Alexei
  * @version 09.05.2011 11:39:21
@@ -75,16 +75,13 @@ public class Array implements interfaces.Array {
 	 * @throws QueueIsFullException
 	 * wenn die Queue voll ist wird dieser Fehler geworfen. 
 	 */
-	private void initQueue(int size) throws IllegalArgumentException
+	private void initQueue(int size) throws IllegalArgumentException, QueueIsFullException
 	{
 		if (size<MIN_VALUE) throw new IllegalArgumentException(ERROR_QUEUE_SIZE_MINIMUM);
 		queue = new ArrayQueue(size);
 		for (int i =0;i<size;i++)
 		{
-			try {
-				queue.add(i);
-			} catch (QueueIsFullException e) {//can't happen!
-			}
+			queue.add(i);
 		}
 	}
 	
@@ -94,7 +91,7 @@ public class Array implements interfaces.Array {
 	 * @throws QueueIsFullException 
 	 * 
 	 */
-	public Array(int size) throws IllegalArgumentException {
+	public Array(int size) throws IllegalArgumentException, QueueIsFullException {
 		if (size < MIN_VALUE)
 			throw new IllegalArgumentException(ERROR_MIN_INDEX);
 		initQueue(size);
@@ -144,8 +141,9 @@ public class Array implements interfaces.Array {
 	private int getInternalIndex(Object object) throws IllegalArgumentException {
 		if (object == null)
 			throw new IllegalArgumentException(ERROR_OBJECT_NULL);
-		for (int i = 0; i < size; i++) {
-			if (object.equals(elements[i])) {
+		for (int i = 0; i < elements.length; i++) {
+			
+			if (elements[i].equals(object)) {
 				return i;
 			}
 		}
