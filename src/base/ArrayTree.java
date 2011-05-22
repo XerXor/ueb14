@@ -1,7 +1,9 @@
 package base;
 
 import java.util.Comparator;
+
 import exceptions.ArrayIsEmptyException;
+import exceptions.ArrayNotHaveThisElementException;
 import exceptions.QueueIsEmptyException;
 import exceptions.QueueIsFullException;
 import exceptions.TreeException;
@@ -32,9 +34,16 @@ public class ArrayTree implements interfaces.ArrayTree,Comparator<Object>{
 	}
 
 	@Override
-	public void remove(Object object) throws TreeException, ArrayIsEmptyException, QueueIsFullException {
-		array.remove(object);
-		dustbintree.remove(object);
+	public void remove(Object object) throws TreeException, ArrayIsEmptyException, QueueIsFullException, ArrayNotHaveThisElementException {
+		if (array.contains(object))
+		{
+			array.remove(object);
+			dustbintree.remove(object);
+		}
+		else
+		{
+			throw new ArrayNotHaveThisElementException(object.toString() + "ist nicht vorhanden. Und kann daher nicht geloescht werden.");
+		}
 	}
 
 	@Override

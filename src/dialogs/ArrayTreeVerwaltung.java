@@ -3,6 +3,7 @@ package dialogs;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 import exceptions.ArrayIsEmptyException;
+import exceptions.ArrayNotHaveThisElementException;
 import exceptions.IllegalCommandException;
 import exceptions.QueueIsEmptyException;
 import exceptions.QueueIsFullException;
@@ -85,6 +86,7 @@ public class ArrayTreeVerwaltung {
 	 *            wurde.
 	 * @throws QueueIsFullException
 	 * @throws ArrayIsEmptyException
+	 * @throws ArrayNotHaveThisElementException 
 	 * @throws IllegalArgumentException
 	 * @throws NotAllowedArgumentException
 	 *             wenn die uebergebene Zeile als kein gueltiger Befehl
@@ -93,7 +95,7 @@ public class ArrayTreeVerwaltung {
 	 *             wenn ein die Queue leer ist.
 	 */
 	public void remove(String line) throws IllegalCommandException,
-			TreeException, ArrayIsEmptyException, QueueIsFullException {
+			TreeException, ArrayIsEmptyException, QueueIsFullException, IllegalArgumentException, ArrayNotHaveThisElementException {
 		line = line.substring(1);
 		Scanner scanner = new Scanner(line);
 		scanner.findInLine(REGEX_STRING);

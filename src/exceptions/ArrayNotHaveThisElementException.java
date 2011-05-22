@@ -6,12 +6,17 @@ package exceptions;
  * @author Alexei
  * @version 09.05.2011 12:50:55
  */
-public class ArrayNotHaveThisElement extends EigeneExceptions{
+public class ArrayNotHaveThisElementException extends EigeneExceptions{
 
 	private final static String ERROR_ARRAY_DONT_HAVE_THIS_EMLEMENT="Element ist nicht im Array vorhanden.";
 	
-	public ArrayNotHaveThisElement()
+	public ArrayNotHaveThisElementException()
 	{
 		super(ERROR_ARRAY_DONT_HAVE_THIS_EMLEMENT);
+	}
+	
+	public ArrayNotHaveThisElementException(String message)
+	{
+		super(message);
 	}
 }
