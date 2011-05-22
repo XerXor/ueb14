@@ -144,7 +144,7 @@ public class Array implements interfaces.Array {
 	private int getInternalIndex(Object object) throws IllegalArgumentException {
 		if (object == null)
 			throw new IllegalArgumentException(ERROR_OBJECT_NULL);
-		for (int i = 0; i < elements.length; i++) {
+		for (int i = 0; i < size; i++) {
 			if (object.equals(elements[i])) {
 				return i;
 			}

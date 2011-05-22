@@ -9,9 +9,10 @@ import exceptions.TreeException;
  * 
  * @author Alexei Felberg
  * @author Daniel Rhein
- * @version 20.05.2011
+ * @version 22.05.2011
  */
 public class BinaryTree implements interfaces.BinaryTree {
+	private static final String EXCEPTION_NO_SUCH_ELEMENT = "Uebergebenes Element befindet sich nicht im Baum!";
 	private static final String OUT_NEW_LINE = "\n";
 	private static final String OUT_DELIMITER = "\t";
 	private static final String EXCEPTION_OUT_OF_BOUNDS = "Index is out of BinaryTree bounds!";
@@ -72,6 +73,22 @@ public class BinaryTree implements interfaces.BinaryTree {
 
 	@Override
 	public void remove(Object object) throws TreeException {
+		removePosition(findElement(object));
+	}
+
+	/**
+	 * Methode durchsucht den Baum nach einem BaumElement, welches die
+	 * uebergebene Referenz beinhaltet.
+	 * 
+	 * @param object
+	 *            nach dem des passende BaumElement gesucht wird.
+	 * @throws TreeException
+	 * <br>
+	 *             wenn:<li>uebergebenes Objekt null ist</li><li>der Baum leer
+	 *             ist</li><li>kein BaumElement mit uebergebener Referenz
+	 *             vorhanden ist</li>
+	 */
+	protected TreeElement findElement(Object object) throws TreeException {
 		if (object == null)
 			throw new TreeException(EXCEPTION_RECEIVED_NULL);
 		if (size == 0)
@@ -93,12 +110,11 @@ public class BinaryTree implements interfaces.BinaryTree {
 					aktuellesElement = aktuellesElement.rightChild;
 			} else {
 				if (vergleichsWert == 0) {
-					removePosition(aktuellesElement);
-					size--;
-					return;
+					return aktuellesElement;
 				}
 			}
 		}
+		throw new TreeException(EXCEPTION_NO_SUCH_ELEMENT);
 	}
 
 	/**
@@ -151,13 +167,14 @@ public class BinaryTree implements interfaces.BinaryTree {
 				aktuellesElement.rightChild = null;
 				root.father = null;
 				if (aktuellesElement.leftChild != null) {
-					aktuellesElement.leftChild.father = root;
-					getMostLeftOf(root).leftChild = aktuellesElement.leftChild;
+					TreeElement mostLeftOfRoot = getMostLeftOf(root);
+					mostLeftOfRoot.leftChild = aktuellesElement.leftChild;
+					aktuellesElement.leftChild.father = mostLeftOfRoot;
 					aktuellesElement.leftChild = null;
 				}
 			} else if (aktuellesElement.leftChild != null) {
 				leftChild = aktuellesElement.leftChild;
-				aktuellesElement.leftChild.father = null;
+				leftChild.father = null;
 				aktuellesElement.leftChild = null;
 				root = leftChild;
 			} else {
@@ -179,6 +196,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 				}
 				aktuellesElement.father = null;
 			}
+		size--;
 	}
 
 	@Override
@@ -253,17 +271,17 @@ public class BinaryTree implements interfaces.BinaryTree {
 			} else {
 				int vergleichsWert = comparator.compare(currentElement.data,
 						currentElement.father.data);
-				if (vergleichsWert < 1) {
-					return currentElement.father;
-				} else {
-					while (vergleichsWert == 1 && !currentElement.isRoot()) {
-						vergleichsWert = comparator
-								.compare(currentElement.data,
-										currentElement.father.data);
-						currentElement = currentElement.father;
-					}
-					return currentElement;
+				// if (vergleichsWert < 1) {
+				// return currentElement.father;
+				// } else {
+				currentElement = currentElement.father;
+				while (vergleichsWert > 0 && !currentElement.isRoot()) {
+					vergleichsWert = comparator.compare(currentElement.data,
+							currentElement.father.data);
+					currentElement = currentElement.father;
 				}
+				return currentElement;
+				// }
 			}
 		}
 		return null;
@@ -398,9 +416,7 @@ public class BinaryTree implements interfaces.BinaryTree {
 		TreeElement currentElement = getMostRightOf(root);
 		StringBuilder ausgabe = new StringBuilder();
 		StringBuilder maxElementTabs = new StringBuilder();
-		for (int tabsDone = 0; tabsDone <= maxElementLength; tabsDone++) {
-			maxElementTabs.append(OUT_DELIMITER);
-		}
+		maxElementTabs.append(OUT_DELIMITER);
 		for (int i = 0; i < size; i++) {
 			int tabsToDo = levelOf(currentElement);
 			while (tabsToDo != 0) {
