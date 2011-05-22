@@ -30,6 +30,6 @@ public class Person {
 	}
 	@Override
 	public boolean equals(Object o){
-		return name.equals(o);
+		return name.equals(((Person)o).name);
 	}
 }

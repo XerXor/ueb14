@@ -10,18 +10,18 @@ public class TestTree {
 		try {
 			tree = new BinaryTree(new IntegerComparator());
 			tree.insert(1000);
+			tree.insert(500);
 			tree.insert(100);
-			tree.insert(50);
 			tree.insert(10);
 			tree.insert(60);
+			tree.insert(2000);
 			tree.insert(1500);
-			tree.insert(1200);
-			tree.insert(1800);
-			tree.insert(200);
+			tree.insert(2500);
+			tree.insert(750);
 			tree.insert(150);
 			tree.insert(250);
 			tree.insert(1100);
-			tree.insert(1400);
+			tree.insert(1750);
 			tree.insert(1600);
 			tree.insert(2000);
 		} catch (TreeException e) {
@@ -33,5 +33,24 @@ public class TestTree {
 		System.out.println(tree.printTreeRootUp());
 		System.out.println("\n\nRoot On Ground:");
 		System.out.println(tree.printTreeRootDown());
+		System.out.println("\n\nIn-Order:");
+		System.out.println(tree);
+		
+		System.out.println("\n#####################################################################\n");
+		try {
+			tree.remove(1000);
+		} catch (TreeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Root Left:");
+		System.out.println(tree.printTreeRootLeft());
+		System.out.println("\n\nRoot On Top:");
+		System.out.println(tree.printTreeRootUp());
+		System.out.println("\n\nRoot On Ground:");
+		System.out.println(tree.printTreeRootDown());
+		System.out.println("\n\nIn-Order:");
+		System.out.println(tree);
 	}
 }

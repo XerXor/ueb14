@@ -97,7 +97,7 @@ public class ArrayTreeVerwaltung {
 		MatchResult gefundenes = scanner.match();
 		if (gefundenes.groupCount() < 1)
 			throw new IllegalCommandException(OUT_INVALID_COMMAND);
-		arrayTree.remove(gefundenes.group(1));
+		arrayTree.remove(new Person(gefundenes.group(1)));
 	}
 
 	@Override

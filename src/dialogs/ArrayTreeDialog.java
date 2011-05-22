@@ -63,7 +63,7 @@ public class ArrayTreeDialog {
 	 * @throws IOException
 	 *             bei auftretenden Problemen waehrend des Einlesens.
 	 */
-	public String readFile(String fileName) throws FileException, IOException {
+	public void readFile(String fileName) throws FileException, IOException {
 		FileException.checkFile(fileName);
 		File file = new File(fileName);
 		FileReader fileReader;
@@ -73,7 +73,6 @@ public class ArrayTreeDialog {
 			throw new FileException();
 		}
 		LineNumberReader lineReader = new LineNumberReader(fileReader);
-		StringBuilder stringBuilder = new StringBuilder();
 		String line;
 		line = lineReader.readLine();
 		while (line != null) {
@@ -90,13 +89,12 @@ public class ArrayTreeDialog {
 						+ lineReader.getLineNumber() + OUT_CONTENT + line
 						+ OUT_NEW_LINE + eigeneExceptions);
 			}
-			stringBuilder.append(lineReader.getLineNumber() + OUT_SEPARATOR
-					+ line + OUT_NEW_LINE);
-			stringBuilder.append(treeVerwaltung + OUT_NEW_LINE);
+			System.out.println((lineReader.getLineNumber() + OUT_SEPARATOR
+					+ line));
+			System.out.println(treeVerwaltung);;
 			line = lineReader.readLine();
 		}
 		fileReader.close();
-		return stringBuilder.toString();
 	}
 
 	/**
@@ -116,7 +114,7 @@ public class ArrayTreeDialog {
 					System.exit(0);
 					break;
 				case 1:
-					System.out.println(readFile(readFileName()));
+					readFile(readFileName());
 					break;
 				case 2:
 					System.out.println(treeVerwaltung);
@@ -136,6 +134,8 @@ public class ArrayTreeDialog {
 				System.err.println(numberFormatException);
 			} catch (EigeneExceptions eigeneExceptions) {
 				System.err.println(eigeneExceptions);
+			} catch (Exception exception){
+				System.err.println(exception);
 			}
 		}
 	}
